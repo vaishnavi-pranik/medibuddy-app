@@ -12,6 +12,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+    
     // Hardcoded user data for demo
     final user = User(
       id: '1',
@@ -35,59 +38,26 @@ class HomeScreen extends StatelessWidget {
               expandedHeight: 60,
               floating: false,
               pinned: true,
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: const Color(0xFF3B82F6),
               elevation: 0,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Pranik AI',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      fontFamily: 'Comic Sans MS',
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.white,
-                      size: 22,
-                    ),
-                    onPressed: () {
-                      _showEmergencyContacts(context);
-                    },
-                  ),
-                ],
+              title: Text(
+                'Pranik AI',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  fontFamily: 'Comic Sans MS',
+                  letterSpacing: 0.3,
+                ),
               ),
               centerTitle: false,
             ),
             SliverPadding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(isTablet ? 24 : 16),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   // Today's Health Tip
                   const HealthTips(),
-                  const SizedBox(height: 16),
-
-                  // Health Overview Cards
-                  Row(
-                    children: [
-                      Expanded(child: HealthCard(title: 'BMI', value: '21.3', subtitle: 'Normal', color: Colors.green)),
-                      const SizedBox(width: 12),
-                      Expanded(child: HealthCard(title: 'Weight', value: '${user.weight}kg', subtitle: 'Target: 60kg', color: Colors.blue)),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(child: HealthCard(title: 'Water', value: '6/8', subtitle: 'Glasses today', color: Colors.cyan)),
-                      const SizedBox(width: 12),
-                      Expanded(child: HealthCard(title: 'Steps', value: '7,543', subtitle: 'Target: 10,000', color: Colors.orange)),
-                    ],
-                  ),
                   const SizedBox(height: 24),
 
                   // Upcoming Appointments
@@ -107,36 +77,32 @@ class HomeScreen extends StatelessWidget {
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.5,
+                    crossAxisCount: isTablet ? 4 : 2,
+                    childAspectRatio: isTablet ? 1.2 : 1.3,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                     children: [
                       {
                         'title': 'Symptoms\nChecker',
                         'subtitle': 'AI-powered analysis',
-                        'icon': Icons.search,
                         'color': Colors.red,
                         'route': '/chat'
                       },
                       {
                         'title': 'Find\nDoctors',
                         'subtitle': 'Book appointments',
-                        'icon': Icons.local_hospital,
                         'color': Colors.blue,
                         'route': '/appointments'
                       },
                       {
                         'title': 'Health\nArticles',
                         'subtitle': 'Expert insights',
-                        'icon': Icons.article,
                         'color': Colors.green,
                         'route': '/community'
                       },
                       {
                         'title': 'Medication\nReminder',
                         'subtitle': 'Never miss a dose',
-                        'icon': Icons.medication,
                         'color': Colors.purple,
                         'route': '/profile'
                       },
@@ -144,9 +110,9 @@ class HomeScreen extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => _navigateToResource(context, resource['route'] as String),
                         child: Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(isTablet ? 20 : 12),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFFF0F8FF), // Very light blue background
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: (resource['color'] as Color).withOpacity(0.2),
@@ -162,34 +128,22 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: (resource['color'] as Color).withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Icon(
-                                  resource['icon'] as IconData,
-                                  color: resource['color'] as Color,
-                                  size: 20,
-                                ),
-                              ),
                               const SizedBox(height: 12),
                               Text(
                                 resource['title'] as String,
-                                style: const TextStyle(
-                                  fontSize: 14,
+                                style: TextStyle(
+                                  fontSize: isTablet ? 16 : 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: isTablet ? 6 : 4),
                               Text(
                                 resource['subtitle'] as String,
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: isTablet ? 13 : 11,
                                   color: Colors.grey[600],
                                 ),
                                 maxLines: 1,
@@ -296,19 +250,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.local_hospital,
-                          color: Color(0xFF10B981),
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
