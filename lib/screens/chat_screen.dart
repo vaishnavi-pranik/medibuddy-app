@@ -174,7 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                       final message = chatProvider.messages[index];
                       return Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                           padding: const EdgeInsets.all(12),

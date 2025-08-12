@@ -17,7 +17,7 @@ class ChatProviderSimple with ChangeNotifier {
 
   void _initializeGemini() {
     _model = GenerativeModel(
-      model: 'gemini-pro',
+      model: 'gemini-1.5-flash',
       apiKey: _apiKey,
       generationConfig: GenerationConfig(
         temperature: 0.7,
@@ -59,20 +59,25 @@ class ChatProviderSimple with ChangeNotifier {
     try {
       // Create a health-focused prompt
       final healthPrompt = '''
-You are Pranik AI, a friendly and knowledgeable health assistant. Your role is to:
-1. Provide general health information and wellness tips
-2. Suggest when to consult healthcare professionals
-3. Offer lifestyle and prevention advice
-4. Be empathetic and supportive
-5. Always remind users that you're not a replacement for professional medical advice
+You are Pranik AI, a friendly health assistant. Provide helpful health advice, wellness tips, and general medical information. Always remind users to consult healthcare professionals for serious concerns.
 
-User's question: $messageText
+Question: $messageText
 
-Please provide a helpful, accurate, and caring response. Keep it concise but informative.
+Provide a helpful, concise response (2-3 sentences max).
 ''';
+
+      if (kDebugMode) {
+        print('Sending request to Gemini API...');
+        print('API Key configured: ${_apiKey.isNotEmpty}');
+      }
 
       final content = [Content.text(healthPrompt)];
       final response = await _model.generateContent(content);
+
+      if (kDebugMode) {
+        print('Received response from Gemini API');
+        print('Response text: ${response.text}');
+      }
 
       String responseText = response.text ?? 'I apologize, but I couldn\'t generate a response. Please try again.';
       
@@ -93,15 +98,23 @@ Please provide a helpful, accurate, and caring response. Keep it concise but inf
       _messages.add(aiMessage);
     } catch (e) {
       // Handle errors gracefully
-      String errorMessage = 'I\'m sorry, I\'m having trouble connecting right now. Please check your internet connection and try again.';
+      String errorMessage = 'I\'m having trouble connecting to the AI service. Please check your internet connection and try again.';
+      
+      if (kDebugMode) {
+        print('Gemini API Error Details: $e');
+        print('Error type: ${e.runtimeType}');
+        print('Error string: ${e.toString()}');
+      }
       
       // Check for specific error types
-      if (e.toString().contains('API_KEY')) {
-        errorMessage = 'There seems to be an issue with the API configuration. Please try again later.';
+      if (e.toString().contains('API_KEY') || e.toString().contains('403')) {
+        errorMessage = 'There seems to be an issue with the API configuration. Please contact support.';
       } else if (e.toString().contains('SAFETY')) {
         errorMessage = 'I couldn\'t process that request due to safety guidelines. Please try rephrasing your question.';
       } else if (e.toString().contains('QUOTA') || e.toString().contains('429')) {
         errorMessage = 'The service is currently busy. Please try again in a moment.';
+      } else if (e.toString().contains('network') || e.toString().contains('connection')) {
+        errorMessage = 'Network connection issue. Please check your internet and try again.';
       }
 
       final errorChatMessage = ChatMessage(
@@ -112,10 +125,6 @@ Please provide a helpful, accurate, and caring response. Keep it concise but inf
       );
 
       _messages.add(errorChatMessage);
-      
-      if (kDebugMode) {
-        print('Gemini API Error: $e');
-      }
     } finally {
       _isTyping = false;
       notifyListeners();

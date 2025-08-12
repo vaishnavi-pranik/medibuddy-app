@@ -16,9 +16,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: const Color(0xFF3B82F6),
         foregroundColor: Colors.white,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
+          TextButton(
             onPressed: () => _editProfile(),
+            child: const Text('Edit', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -32,7 +32,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                    backgroundColor: Color(0xFF3B82F6),
+                    child: Text(
+                      'VR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -58,11 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Personal Information',
               [
-                _buildInfoTile(Icons.person, 'Full Name', 'Vaishnavi Reddy'),
-                _buildInfoTile(Icons.cake, 'Date of Birth', 'January 15, 1990'),
-                _buildInfoTile(Icons.wc, 'Gender', 'Female'),
-                _buildInfoTile(Icons.phone, 'Phone', '+91 9876543210'),
-                _buildInfoTile(Icons.email, 'Email', 'vaishnavi.reddy@email.com'),
+                _buildInfoTile('Full Name', 'Vaishnavi Reddy'),
+                _buildInfoTile('Date of Birth', 'January 15, 1990'),
+                _buildInfoTile('Gender', 'Female'),
+                _buildInfoTile('Phone', '+91 9876543210'),
+                _buildInfoTile('Email', 'vaishnavi.reddy@email.com'),
               ],
             ),
 
@@ -72,11 +80,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Health Information',
               [
-                _buildInfoTile(Icons.fitness_center, 'Weight', '70 kg'),
-                _buildInfoTile(Icons.height, 'Height', '175 cm'),
-                _buildInfoTile(Icons.bloodtype, 'Blood Group', 'O+'),
-                _buildInfoTile(Icons.local_hospital, 'Allergies', 'None'),
-                _buildInfoTile(Icons.medication, 'Current Medications', 'None'),
+                _buildInfoTile('Weight', '70 kg'),
+                _buildInfoTile('Height', '175 cm'),
+                _buildInfoTile('Blood Group', 'O+'),
+                _buildInfoTile('Allergies', 'None'),
+                _buildInfoTile('Current Medications', 'None'),
               ],
             ),
 
@@ -86,9 +94,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Emergency Contact',
               [
-                _buildInfoTile(Icons.contact_emergency, 'Emergency Contact', 'Suresh Reddy'),
-                _buildInfoTile(Icons.phone, 'Emergency Phone', '+91 9876543211'),
-                _buildInfoTile(Icons.family_restroom, 'Relationship', 'Father'),
+                _buildInfoTile('Emergency Contact', 'Suresh Reddy'),
+                _buildInfoTile('Emergency Phone', '+91 9876543211'),
+                _buildInfoTile('Relationship', 'Father'),
               ],
             ),
 
@@ -98,9 +106,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Settings',
               [
-                _buildSettingsTile(Icons.notifications, 'Notifications', true),
-                _buildSettingsTile(Icons.location_on, 'Location Services', true),
-                _buildSettingsTile(Icons.dark_mode, 'Dark Mode', false),
+                _buildSettingsTile('Notifications', true),
+                _buildSettingsTile('Location Services', true),
+                _buildSettingsTile('Dark Mode', false),
               ],
             ),
 
@@ -111,10 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: () => _showHealthRecords(),
-                    icon: const Icon(Icons.folder),
-                    label: const Text('View Health Records'),
+                    child: const Text('View Health Records'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF3B82F6),
                       foregroundColor: Colors.white,
@@ -124,10 +131,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () => _exportData(),
-                    icon: const Icon(Icons.download),
-                    label: const Text('Export Health Data'),
+                    child: const Text('Export Health Data'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFF3B82F6),
                       side: const BorderSide(color: Color(0xFF3B82F6)),
@@ -137,10 +143,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
-                  child: OutlinedButton.icon(
+                  child: OutlinedButton(
                     onPressed: () => _showPrivacySettings(),
-                    icon: const Icon(Icons.privacy_tip),
-                    label: const Text('Privacy Settings'),
+                    child: const Text('Privacy Settings'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFF3B82F6),
                       side: const BorderSide(color: Color(0xFF3B82F6)),
@@ -150,10 +155,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: () => _logout(),
-                    icon: const Icon(Icons.logout),
-                    label: const Text('Logout'),
+                    child: const Text('Logout'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
@@ -181,6 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const SizedBox(height: 12),
         Card(
+          color: const Color(0xFFF0F8FF), // Light blue background
           child: Column(
             children: children,
           ),
@@ -189,19 +194,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String title, String subtitle) {
+  Widget _buildInfoTile(String title, String subtitle) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xFF3B82F6)),
       title: Text(title),
       subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right, color: Color(0xFF3B82F6)),
       onTap: () => _editField(title, subtitle),
     );
   }
 
-  Widget _buildSettingsTile(IconData icon, String title, bool value) {
+  Widget _buildSettingsTile(String title, bool value) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xFF3B82F6)),
       title: Text(title),
       trailing: Switch(
         value: value,
@@ -289,17 +291,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.description),
               title: Text('Lab Reports'),
               subtitle: Text('3 recent reports'),
             ),
             ListTile(
-              leading: Icon(Icons.assignment),
               title: Text('Prescriptions'),
               subtitle: Text('5 prescriptions'),
             ),
             ListTile(
-              leading: Icon(Icons.vaccines),
               title: Text('Vaccination Records'),
               subtitle: Text('Up to date'),
             ),
@@ -332,17 +331,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               title: Text('Data Sharing'),
               subtitle: Text('Control how your data is shared'),
-              trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
               title: Text('Account Visibility'),
               subtitle: Text('Manage who can see your profile'),
-              trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
               title: Text('Delete Account'),
               subtitle: Text('Permanently delete your account'),
-              trailing: Icon(Icons.chevron_right),
             ),
           ],
         ),

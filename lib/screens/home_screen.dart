@@ -51,6 +51,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               centerTitle: false,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  onPressed: () => _showEmergencyDialog(context),
+                ),
+              ],
             ),
             SliverPadding(
               padding: EdgeInsets.all(isTablet ? 24 : 16),
@@ -244,9 +250,18 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFFF0F8FF), // Very light blue background
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[200]!),
+                    border: Border.all(
+                      color: const Color(0xFF3B82F6).withOpacity(0.2),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
@@ -315,11 +330,29 @@ class HomeScreen extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildEmergencyContact('Ambulance', '108'),
-              const SizedBox(height: 12),
-              _buildEmergencyContact('Dad', '8393999311'),
-              const SizedBox(height: 12),
-              _buildEmergencyContact('Mom', '9389399333'),
+              _buildEmergencyContact(
+                context,
+                'Ambulance',
+                '108',
+                Icons.local_hospital,
+                Colors.red,
+              ),
+              const SizedBox(height: 8),
+              _buildEmergencyContact(
+                context,
+                'Dad',
+                '92092929239',
+                Icons.person,
+                Color(0xFF3B82F6),
+              ),
+              const SizedBox(height: 8),
+              _buildEmergencyContact(
+                context,
+                'Mom',
+                '9299192192',
+                Icons.person,
+                Color(0xFF3B82F6),
+              ),
             ],
           ),
           actions: [
@@ -336,57 +369,94 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyContact(String name, String number) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                Text(
-                  number,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
+  void _showEmergencyDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFFF0F8FF), // Light blue background
+        title: const Text(
+          'Emergency Contacts',
+          style: TextStyle(
+            color: Color(0xFF3B82F6),
+            fontWeight: FontWeight.bold,
           ),
-          ElevatedButton(
-            onPressed: () => _makePhoneCall(number),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildEmergencyContact(
+              context,
+              'Ambulance',
+              '108',
+              Icons.local_hospital,
+              Colors.red,
             ),
+            const SizedBox(height: 8),
+            _buildEmergencyContact(
+              context,
+              'Dad',
+              '92092929239',
+              Icons.person,
+              Color(0xFF3B82F6),
+            ),
+            const SizedBox(height: 8),
+            _buildEmergencyContact(
+              context,
+              'Mom',
+              '9299192192',
+              Icons.person,
+              Color(0xFF3B82F6),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
             child: const Text(
-              'Call',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+              'Close',
+              style: TextStyle(color: Color(0xFF3B82F6)),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmergencyContact(
+    BuildContext context,
+    String name,
+    String number,
+    IconData icon,
+    Color iconColor,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: ListTile(
+        title: Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(
+          number,
+          style: TextStyle(color: Colors.grey[600]),
+        ),
+        trailing: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF3B82F6),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.call, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+              _makePhoneCall(number);
+            },
+          ),
+        ),
       ),
     );
   }

@@ -30,22 +30,22 @@ class MyApp extends StatelessWidget {
         title: 'Health Buddy - Your Complete Health Companion',
         debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.green,
-              primaryColor: const Color(0xFF10b981),
+              primarySwatch: Colors.blue,
+              primaryColor: const Color(0xFF3B82F6),
               colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF10b981),
+                seedColor: const Color(0xFF3B82F6),
                 brightness: Brightness.light,
               ),
               scaffoldBackgroundColor: const Color(0xFFF9FAFB),
               appBarTheme: const AppBarTheme(
-                backgroundColor: Color(0xFF10b981),
+                backgroundColor: Color(0xFF3B82F6),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 centerTitle: true,
               ),
               bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                 backgroundColor: Colors.white,
-                selectedItemColor: Color(0xFF10b981),
+                selectedItemColor: Color(0xFF3B82F6),
                 unselectedItemColor: Colors.grey,
                 type: BottomNavigationBarType.fixed,
                 elevation: 8,
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF10b981),
+                  backgroundColor: const Color(0xFF3B82F6),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFF10b981)),
+                  borderSide: const BorderSide(color: Color(0xFF3B82F6)),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
