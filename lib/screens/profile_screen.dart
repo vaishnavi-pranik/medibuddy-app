@@ -13,6 +13,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        backgroundColor: const Color(0xFF3B82F6),
+        foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -34,14 +36,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'John Doe',
+                    'Vaishnavi Reddy',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'john.doe@email.com',
+                    'vaishnavi.reddy@email.com',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -56,11 +58,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Personal Information',
               [
-                _buildInfoTile(Icons.person, 'Full Name', 'John Doe'),
+                _buildInfoTile(Icons.person, 'Full Name', 'Vaishnavi Reddy'),
                 _buildInfoTile(Icons.cake, 'Date of Birth', 'January 15, 1990'),
-                _buildInfoTile(Icons.wc, 'Gender', 'Male'),
+                _buildInfoTile(Icons.wc, 'Gender', 'Female'),
                 _buildInfoTile(Icons.phone, 'Phone', '+91 9876543210'),
-                _buildInfoTile(Icons.email, 'Email', 'john.doe@email.com'),
+                _buildInfoTile(Icons.email, 'Email', 'vaishnavi.reddy@email.com'),
               ],
             ),
 
@@ -84,9 +86,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSection(
               'Emergency Contact',
               [
-                _buildInfoTile(Icons.contact_emergency, 'Emergency Contact', 'Jane Doe'),
+                _buildInfoTile(Icons.contact_emergency, 'Emergency Contact', 'Suresh Reddy'),
                 _buildInfoTile(Icons.phone, 'Emergency Phone', '+91 9876543211'),
-                _buildInfoTile(Icons.family_restroom, 'Relationship', 'Spouse'),
+                _buildInfoTile(Icons.family_restroom, 'Relationship', 'Father'),
               ],
             ),
 
@@ -113,6 +115,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () => _showHealthRecords(),
                     icon: const Icon(Icons.folder),
                     label: const Text('View Health Records'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF3B82F6),
+                      foregroundColor: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -122,6 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () => _exportData(),
                     icon: const Icon(Icons.download),
                     label: const Text('Export Health Data'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF3B82F6),
+                      side: const BorderSide(color: Color(0xFF3B82F6)),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -131,6 +141,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () => _showPrivacySettings(),
                     icon: const Icon(Icons.privacy_tip),
                     label: const Text('Privacy Settings'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF3B82F6),
+                      side: const BorderSide(color: Color(0xFF3B82F6)),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -177,20 +191,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildInfoTile(IconData icon, String title, String subtitle) {
     return ListTile(
-      leading: Icon(icon),
+      leading: Icon(icon, color: const Color(0xFF3B82F6)),
       title: Text(title),
       subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right, color: Color(0xFF3B82F6)),
       onTap: () => _editField(title, subtitle),
     );
   }
 
   Widget _buildSettingsTile(IconData icon, String title, bool value) {
     return ListTile(
-      leading: Icon(icon),
+      leading: Icon(icon, color: const Color(0xFF3B82F6)),
       title: Text(title),
       trailing: Switch(
         value: value,
+        activeColor: const Color(0xFF3B82F6),
         onChanged: (newValue) => _toggleSetting(title, newValue),
       ),
     );

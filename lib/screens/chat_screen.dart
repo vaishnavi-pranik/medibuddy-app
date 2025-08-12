@@ -69,10 +69,6 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.all(isTablet ? 24 : 16),
               decoration: const BoxDecoration(
                 color: Color(0xFF3B82F6),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
               ),
               child: Row(
                 children: [
@@ -177,27 +173,33 @@ class _ChatScreenState extends State<ChatScreen> {
                       }
 
                       final message = chatProvider.messages[index];
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: message.isUser
-                              ? const Color(0xFF3B82F6)
-                              : const Color(0xFFF0F8FF),
-                          borderRadius: BorderRadius.circular(12),
-                          border: message.isUser
-                              ? null
-                              : Border.all(
-                                  color: const Color(0xFF3B82F6).withOpacity(0.2),
-                                ),
-                        ),
-                        child: Text(
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                          padding: const EdgeInsets.all(12),
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: message.isUser
+                                ? const Color(0xFF3B82F6)
+                                : const Color(0xFFF0F8FF),
+                            borderRadius: BorderRadius.circular(12),
+                            border: message.isUser
+                                ? null
+                                : Border.all(
+                                    color: const Color(0xFF3B82F6).withOpacity(0.2),
+                                  ),
+                          ),
+                          child: Text(
                           message.message,
                           style: TextStyle(
                             color: message.isUser ? Colors.white : Colors.black87,
                             fontSize: isTablet ? 16 : 14,
                             height: 1.4,
                           ),
+                        ),
                         ),
                       );
                     },

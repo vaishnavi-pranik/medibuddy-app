@@ -74,10 +74,18 @@ Please provide a helpful, accurate, and caring response. Keep it concise but inf
       final content = [Content.text(healthPrompt)];
       final response = await _model.generateContent(content);
 
+      String responseText = response.text ?? 'I apologize, but I couldn\'t generate a response. Please try again.';
+      
+      // Clean up the response text
+      responseText = responseText.trim();
+      if (responseText.isEmpty) {
+        responseText = 'I apologize, but I couldn\'t generate a response. Please try again.';
+      }
+
       // Add AI response
       final aiMessage = ChatMessage(
         id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
-        message: response.text ?? 'I apologize, but I couldn\'t generate a response. Please try again.',
+        message: responseText,
         isUser: false,
         timestamp: DateTime.now(),
       );
@@ -85,14 +93,25 @@ Please provide a helpful, accurate, and caring response. Keep it concise but inf
       _messages.add(aiMessage);
     } catch (e) {
       // Handle errors gracefully
-      final errorMessage = ChatMessage(
+      String errorMessage = 'I\'m sorry, I\'m having trouble connecting right now. Please check your internet connection and try again.';
+      
+      // Check for specific error types
+      if (e.toString().contains('API_KEY')) {
+        errorMessage = 'There seems to be an issue with the API configuration. Please try again later.';
+      } else if (e.toString().contains('SAFETY')) {
+        errorMessage = 'I couldn\'t process that request due to safety guidelines. Please try rephrasing your question.';
+      } else if (e.toString().contains('QUOTA') || e.toString().contains('429')) {
+        errorMessage = 'The service is currently busy. Please try again in a moment.';
+      }
+
+      final errorChatMessage = ChatMessage(
         id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
-        message: 'I\'m sorry, I\'m having trouble connecting right now. Please check your internet connection and try again. For urgent medical concerns, please contact a healthcare professional.',
+        message: errorMessage,
         isUser: false,
         timestamp: DateTime.now(),
       );
 
-      _messages.add(errorMessage);
+      _messages.add(errorChatMessage);
       
       if (kDebugMode) {
         print('Gemini API Error: $e');
